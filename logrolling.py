@@ -6,8 +6,8 @@ import logging
 
 
 class IndentLogFormatter(logging.Formatter):
-    """Formatter to be used with logging that puts message in lines following
-    the log metainformation, indented.
+    """Formatter to be used with logging that puts indented message in lines
+    following the log meta-information
     """
     def format(self, record):
         out_str = super().format(record)
@@ -16,7 +16,7 @@ class IndentLogFormatter(logging.Formatter):
 
 
 class LogWrapper:
-    """Keeps track of details of logging
+    """Keeps track of details of logging and can log messages
     """
     def __init__(self, logger_name, logged_modules, use_console=True):
         """
@@ -44,6 +44,8 @@ class LogWrapper:
         return self.logger
 
     def add_consolehandler(self):
+        """Add console output to this logger
+        """
         # console handler
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
@@ -54,6 +56,14 @@ class LogWrapper:
             logging.getLogger(logger_name).addHandler(ch)
 
     def add_filehandler(self, logfile_path):
+        """Add a file output to this logger
+
+        Args:
+            logfile_path (path-like): path of file in filehandler to remove
+
+        Returns:
+            logging.Handler: handler object created
+        """
         # make to string for python 3.5 logging and dict key
         logfile_path = str(logfile_path)
 
@@ -76,9 +86,14 @@ class LogWrapper:
         return fh
 
     def remove_filehandler(self, logfile_path):
+        """Remove a file output to this logger, specified by filepath
+
+        Args:
+            logfile_path (path-like): path of file in filehandler to remove
+        """
         self.logger.removeHandler(self.filehandles[str(logfile_path)])
 
-    # convenience functions to pass through to logger
+    # convenience functions to pass through to self.logger
     def debug(self, *args, **kwargs):
         self.logger.debug(*args, **kwargs)
     def info(self, *args, **kwargs):
