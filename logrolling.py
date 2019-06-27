@@ -1,12 +1,15 @@
 """An encapsulation of logging to make using it easier and more pythonic
 """
 
+
 import logging
 
 
 class IndentLogFormatter(logging.Formatter):
+    """Formatter to be used with logging that puts message in lines following
+    the log metainformation, indented.
+    """
     def format(self, record):
-        #base_msg = record.getMessage()
         out_str = super().format(record)
         out_str = out_str.replace("\n", "\n    ")
         return out_str
