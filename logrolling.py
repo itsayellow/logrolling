@@ -9,6 +9,7 @@ class IndentLogFormatter(logging.Formatter):
     """Formatter to be used with logging that puts indented message in lines
     following the log meta-information
     """
+
     def format(self, record):
         out_str = super().format(record)
         out_str = out_str.replace("\n", "\n    ")
@@ -18,13 +19,16 @@ class IndentLogFormatter(logging.Formatter):
 class LogWrapper:
     """Keeps track of details of logging and can log messages
     """
-    def __init__(self, logger_name, logged_modules, use_console=True):
+
+    def __init__(self, logger_name, logged_modules=None, use_console=True):
         """
         Args:
             logger_name (str):
             logged_modules (list):
             use_console (bool):
         """
+        if logged_modules is None:
+            logged_modules = []
         self.logger = None
         self.filehandles = {}
         self.logged_modules = logged_modules
@@ -71,13 +75,11 @@ class LogWrapper:
         logfile_path = str(logfile_path)
 
         # log file handler
-        fh = logging.FileHandler(logfile_path, mode='w')
+        fh = logging.FileHandler(logfile_path, mode="w")
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(
-                IndentLogFormatter(
-                    '%(asctime)s - %(name)s - %(levelname)s\n%(message)s'
-                    )
-                )
+            IndentLogFormatter("%(asctime)s - %(name)s - %(levelname)s\n%(message)s")
+        )
         self.logger.addHandler(fh)
 
         # add logging of requested imports
@@ -99,10 +101,12 @@ class LogWrapper:
     # convenience functions to pass through to self.logger
     def debug(self, *args, **kwargs):
         self.logger.debug(*args, **kwargs)
+
     def info(self, *args, **kwargs):
         self.logger.info(*args, **kwargs)
+
     def warning(self, *args, **kwargs):
         self.logger.warning(*args, **kwargs)
+
     def error(self, *args, **kwargs):
         self.logger.error(*args, **kwargs)
-

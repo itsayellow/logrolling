@@ -23,11 +23,20 @@ logger.add_filehandler("log.txt")
 logger.debug("Starting logging")
 ```
 
-Then, in the imported modules, you can use logging.  The following would be at
-the top of `imported_module1` for example:
+Then, in the imported modules, you can either use logging or logroller.
+
+`logging` example.  The following would be at the top of `imported_module1`:
 ```
 import logging
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+```
+
+`logrolloing` example.  The following would be at the top of `imported_module1`:
+```
+# logging for library defaults to NullHandler unless enabled by importing file
+# use_console=False because importing file is already enabling it (don't dup)
+logger = logrolling.LogWrapper(__name__, use_console=False)
+logger.add_nullhandler()
 ```
