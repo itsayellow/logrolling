@@ -43,6 +43,9 @@ class LogWrapper:
     def get_logger(self):
         return self.logger
 
+    def add_nullhandler(self):
+        self.logger.addHandler(logging.NullHandler())
+
     def add_consolehandler(self):
         """Add console output to this logger
         """
